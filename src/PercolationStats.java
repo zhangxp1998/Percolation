@@ -6,42 +6,9 @@ public class PercolationStats
 	private static final double Z_STAR = 1.96;
 
 	private double[] data;
-	private final int N;
 
 	private double mean;
 	private double stddev;
-
-	private static void openRandomSpot(Percolation p, int N)
-	{
-		int y = StdRandom.uniform(1, N + 1);
-		int x = StdRandom.uniform(1, N + 1);
-
-		for (int i = y; i <= N; i++)
-		{
-			for (int j = x; j <= N; j++)
-			{
-				if (!p.isOpen(i, j))
-				{
-					p.open(i, j);
-					return;
-				}
-			}
-		}
-
-		for (int i = y; i >= 1; i--)
-		{
-			for (int j = x; j >= 1; j--)
-			{
-				if (!p.isOpen(i, j))
-				{
-					p.open(i, j);
-					return;
-				}
-			}
-		}
-
-		assert false;
-	}
 
 	public PercolationStats(int n, int trials) // perform trials independent
 												// experiments on an n-by-n grid
@@ -58,12 +25,16 @@ public class PercolationStats
 			int count = 0;
 			while (!p.percolates())
 			{
-				openRandomSpot(p, n);
+				int row = StdRandom.uniform(1, n + 1);
+				int column = StdRandom.uniform(1, n + 1);
+				if (p.isOpen(row, column))
+					continue;
+				p.open(row, column);
 				count++;
 			}
 			data[i] = count * 1.0 / n / n;
 		}
-		this.N = trials;
+
 		mean = StdStats.mean(data);
 		stddev = StdStats.stddev(data);
 	}
@@ -80,12 +51,12 @@ public class PercolationStats
 
 	public double confidenceLo() // low endpoint of 95% confidence interval
 	{
-		return mean - Z_STAR * stddev / Math.sqrt(N);
+		return mean - Z_STAR * stddev / Math.sqrt(data.length);
 	}
 
 	public double confidenceHi() // high endpoint of 95% confidence interval
 	{
-		return mean + Z_STAR * stddev / Math.sqrt(N);
+		return mean + Z_STAR * stddev / Math.sqrt(data.length);
 	}
 
 	public static void main(String[] args) // test client (described below)
@@ -95,8 +66,8 @@ public class PercolationStats
 		final int T = Integer.parseInt(args[1]);
 
 		PercolationStats stats = new PercolationStats(n, T);
-		System.out.printf("%f\n", stats.mean());
-		System.out.printf("%f\n", stats.stddev());
-		System.out.printf("%f, %f\n", stats.confidenceLo(), stats.confidenceHi());
+		System.out.printf("MEAN:\t%f\n", stats.mean());
+		System.out.printf("STDDEV:\t%f\n", stats.stddev());
+		System.out.printf("ZINTERVAL:\t%f, %f\n", stats.confidenceLo(), stats.confidenceHi());
 	}
 }

@@ -51,10 +51,9 @@ public class Percolation
 	public void open(int row, int col) // open site (row, col) if it is not open
 										// already
 	{
-		if (!inBound(row) || !inBound(col))
-		{
-			throw new IndexOutOfBoundsException();
-		}
+		assert inBound(row);
+		assert inBound(col);
+		
 
 		int i = toIndex(row, col);
 		grid.set(i);
@@ -106,10 +105,9 @@ public class Percolation
 
 	public boolean isOpen(int row, int col) // is site (row, col) open?
 	{
-		if (row < 1 || row > N || col < 1 || col > N)
-		{
-			throw new IndexOutOfBoundsException();
-		}
+		assert inBound(row);
+		assert inBound(col);
+		
 		return isOpen(toIndex(row, col));
 	}
 
@@ -120,6 +118,9 @@ public class Percolation
 
 	public boolean isFull(int row, int col) // is site (row, col) full?
 	{
+		assert inBound(row);
+		assert inBound(col);
+		
 		int i = toIndex(row, col);
 		return isOpen(i) && bf.connected(0, i);
 	}
