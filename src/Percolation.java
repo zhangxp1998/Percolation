@@ -1,6 +1,5 @@
 import java.util.BitSet;
-
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+import java.util.Scanner;
 
 public class Percolation
 {
@@ -27,25 +26,24 @@ public class Percolation
 		// sz = new int[grid.length];
 
 		// Arrays.fill(grid, -1);
-		grid.set(0);
 
+		// Open the virtual top and virtual bottom site
+		grid.set(0);
 		grid.set(last);
 	}
 
 	private boolean inBound(int position)
 	{
-		return position >= 1 && position <= N;
+		return position >= 0 && position < N;
 	}
 
 	private int toIndex(int row, int col)
 	{
-		assert row >= 1;
-		assert col >= 1;
-		assert row <= N;
-		assert col <= N;
+		assert(inBound(row));
+		assert(inBound(col));
 
 		// -1 because the input is 1 based
-		return 1 + (row - 1) * N + (col - 1);
+		return 1 + row * N + col;
 	}
 
 	public void open(int row, int col) // open site (row, col) if it is not open
@@ -53,45 +51,44 @@ public class Percolation
 	{
 		assert inBound(row);
 		assert inBound(col);
-		
 
 		int i = toIndex(row, col);
 		grid.set(i);
 
-		if (row == 1)
+		if (row == 0)
 		{
 			uf.union(0, i);
 			bf.union(0, i);
 		}
-		if (row == N)
+		if (row == N - 1)
 		{
 			uf.union(last, i);
 		}
 
 		// Connect nearby open sites
 		// Up
-		if (row > 1 && isOpen(row - 1, col))
+		if (row > 0 && isOpen(row - 1, col))
 		{
 			uf.union(i, toIndex(row - 1, col));
 			bf.union(i, toIndex(row - 1, col));
 		}
 
 		// Down
-		if (row < N && isOpen(row + 1, col))
+		if (row < N - 1 && isOpen(row + 1, col))
 		{
 			uf.union(i, toIndex(row + 1, col));
 			bf.union(i, toIndex(row + 1, col));
 		}
 
 		// Left
-		if (col > 1 && isOpen(row, col - 1))
+		if (col > 0 && isOpen(row, col - 1))
 		{
 			uf.union(i, toIndex(row, col - 1));
 			bf.union(i, toIndex(row, col - 1));
 		}
 
 		// Right
-		if (col < N && isOpen(row, col + 1))
+		if (col < N - 1 && isOpen(row, col + 1))
 		{
 			uf.union(i, toIndex(row, col + 1));
 			bf.union(i, toIndex(row, col + 1));
@@ -107,7 +104,7 @@ public class Percolation
 	{
 		assert inBound(row);
 		assert inBound(col);
-		
+
 		return isOpen(toIndex(row, col));
 	}
 
@@ -120,7 +117,7 @@ public class Percolation
 	{
 		assert inBound(row);
 		assert inBound(col);
-		
+
 		int i = toIndex(row, col);
 		return isOpen(i) && bf.connected(0, i);
 	}
@@ -132,6 +129,17 @@ public class Percolation
 
 	public static void main(String[] args) // test client (optional)
 	{
-
+		Scanner in = new Scanner(System.in);
+		final int N = Integer.parseInt(in.nextLine());
+		Percolation p = new Percolation(N);
+		while (in.hasNextLine())
+		{
+			int col = in.nextInt();
+			int row = in.nextInt();
+			in.nextLine();
+			p.open(row, col);
+		}
+		in.close();
+		System.out.println(p.percolates() ? "YES" : "NO");
 	}
 }

@@ -39,9 +39,9 @@ public class PercolationVisualizer
 
 		// draw n-by-n grid
 		int opened = 0;
-		for (int row = 1; row <= n; row++)
+		for (int row = 0; row < n; row++)
 		{
-			for (int col = 1; col <= n; col++)
+			for (int col = 0; col < n; col++)
 			{
 				if (perc.isFull(row, col))
 				{
@@ -53,7 +53,7 @@ public class PercolationVisualizer
 					opened++;
 				} else
 					StdDraw.setPenColor(StdDraw.BLACK);
-				StdDraw.filledSquare(col - 0.5, n - row + 0.5, 0.45);
+				StdDraw.filledSquare(col + 0.5, n - row - 0.5, 0.45);
 			}
 		}
 

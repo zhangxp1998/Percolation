@@ -27,7 +27,7 @@ public class InteractivePercolationVisualizer
 
 		// repeatedly open site specified my mouse click and draw resulting
 		// system
-		StdOut.println(n);
+		System.out.println(n);
 
 		StdDraw.enableDoubleBuffering();
 		Percolation perc = new Percolation(n);
@@ -46,11 +46,11 @@ public class InteractivePercolationVisualizer
 				double y = StdDraw.mouseY();
 
 				// convert to row i, column j
-				int i = (int) (n - Math.floor(y));
-				int j = (int) (1 + Math.floor(x));
+				int i = (int) (n - Math.floor(y) - 1);
+				int j = (int) (Math.floor(x));
 
 				// open site (i, j) provided it's in bounds
-				if (i >= 1 && i <= n && j >= 1 && j <= n)
+				if (i >= 0 && i < n && j >= 0 && j < n)
 				{
 					if (!perc.isOpen(i, j))
 					{
