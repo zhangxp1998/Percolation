@@ -1,5 +1,6 @@
 import java.util.BitSet;
 import java.util.Scanner;
+import java.util.function.Function;
 
 public class Percolation
 {
@@ -7,10 +8,15 @@ public class Percolation
 	private final int N;
 	private BitSet grid;
 	private int last;
-	private WeightedQuickUnionPathCompressionUF uf;
-	private WeightedQuickUnionPathCompressionUF bf;
+	private UnionFind uf;
+	private UnionFind bf;
 
-	public Percolation(int n) // create n-by-n grid, with all sites blocked
+	public Percolation(int n)
+	{
+		this(n, N -> new WeightedQuickUnionPathCompressionUF(N));
+	}
+	
+	public Percolation(int n, Function<Integer, UnionFind> factory) // create n-by-n grid, with all sites blocked
 	{
 		if (n <= 0)
 		{
@@ -18,8 +24,8 @@ public class Percolation
 		}
 
 		this.N = n;
-		uf = new WeightedQuickUnionPathCompressionUF(n * n + 2);
-		bf = new WeightedQuickUnionPathCompressionUF(n * n + 1);
+		uf = factory.apply(n * n + 2);
+		bf = factory.apply(n * n + 1);
 
 		last = N * N + 1;
 		grid = new BitSet(N * N + 2);

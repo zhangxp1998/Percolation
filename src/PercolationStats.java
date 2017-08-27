@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Random;
+import java.util.function.Function;
 
 public class PercolationStats
 {
@@ -18,8 +19,8 @@ public class PercolationStats
 	// Total time in nanoseconds
 	private double timeMean;
 
-	public PercolationStats(int n, int trials) // perform trials independent
-												// experiments on an n-by-n grid
+	public PercolationStats(int n, int trials, Function<Integer, UnionFind> factory) // perform trials independent
+	// experiments on an n-by-n grid
 	{
 		if (n <= 0 || trials <= 0)
 			throw new IllegalArgumentException();
@@ -29,7 +30,7 @@ public class PercolationStats
 		for (int i = 0; i < trials; i++)
 		{
 			long start = System.nanoTime();
-			Percolation p = new Percolation(n);
+			Percolation p = new Percolation(n, factory);
 			int count = 0;
 			while (!p.percolates())
 			{
@@ -92,16 +93,28 @@ public class PercolationStats
 		return mean + Z_STAR * stddev / Math.sqrt(data.length);
 	}
 
+	public static UnionFind slow(int n)
+	{
+		return new QuickFindUF(n);
+	}
+
+	public static UnionFind fast(int n)
+	{
+		return new WeightedQuickUnionPathCompressionUF(n);
+	}
+
 	public static void main(String[] args) // test client (described below)
 	{
-		assert args.length >= 2;
+		assert args.length == 3;
 		final int n = Integer.parseInt(args[0]);
 		final int T = Integer.parseInt(args[1]);
 
-		PercolationStats stats = new PercolationStats(n, T);
+		PercolationStats stats = new PercolationStats(n, T,
+				args[2].equals("fast") ? PercolationStats::fast : PercolationStats::slow);
 		System.out.printf("mean threshold=%f\n", stats.mean());
 		System.out.printf("std dev=%f\n", stats.stddev());
 		System.out.printf("time=%f\n", stats.totalTime());
+		System.out.printf("mean time=%f\n", stats.meanTime());
 		System.out.printf("stddev time=%f\n", stats.stddevTime());
 	}
 }
