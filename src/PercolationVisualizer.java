@@ -21,8 +21,6 @@ import java.awt.Font;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import edu.princeton.cs.algs4.StdDraw;
-
 public class PercolationVisualizer
 {
 
