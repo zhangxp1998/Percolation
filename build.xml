@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<property name="src.dir" value="src" />
+	<property name="bin.dir" value="bin" />
+
+	<target name="clean">
+		<delete>
+			<fileset dir="${bin.dir}" includes="**/*.class" />
+		</delete>
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${bin.dir}" />
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${bin.dir}" />
+	</target>
+
+	<target name="run" depends="compile">
+		<java classpath="${bin.dir}" classname="PercolationStats" fork="true" />
+	</target>
+</project>
