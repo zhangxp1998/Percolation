@@ -30,7 +30,7 @@
  * @author Robert Sedgewick
  * @author Kevin Wayne
  */
-public class WeightedQuickUnionPathCompression
+public class WeightedQuickUnionPathCompressionUF
 {
 	private int[] parent; // parent[i] = parent of i
 	private int[] size; // size[i] = number of sites in tree rooted at i
@@ -47,7 +47,7 @@ public class WeightedQuickUnionPathCompression
 	 * @throws IllegalArgumentException
 	 *             if {@code n < 0}
 	 */
-	public WeightedQuickUnionPathCompression(int n)
+	public WeightedQuickUnionPathCompressionUF(int n)
 	{
 		count = n;
 		parent = new int[n];

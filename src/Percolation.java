@@ -7,8 +7,8 @@ public class Percolation
 	private final int N;
 	private BitSet grid;
 	private int last;
-	private WeightedQuickUnionPathCompression uf;
-	private WeightedQuickUnionPathCompression bf;
+	private WeightedQuickUnionPathCompressionUF uf;
+	private WeightedQuickUnionPathCompressionUF bf;
 
 	public Percolation(int n) // create n-by-n grid, with all sites blocked
 	{
@@ -18,8 +18,8 @@ public class Percolation
 		}
 
 		this.N = n;
-		uf = new WeightedQuickUnionPathCompression(n * n + 2);
-		bf = new WeightedQuickUnionPathCompression(n * n + 1);
+		uf = new WeightedQuickUnionPathCompressionUF(n * n + 2);
+		bf = new WeightedQuickUnionPathCompressionUF(n * n + 1);
 
 		last = N * N + 1;
 		grid = new BitSet(N * N + 2);
