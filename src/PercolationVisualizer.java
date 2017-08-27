@@ -18,7 +18,6 @@
  ******************************************************************************/
 
 import java.awt.Font;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
@@ -74,7 +73,7 @@ public class PercolationVisualizer
 
 	public static void main(String[] args) throws FileNotFoundException
 	{
-		Scanner in = new Scanner(new File(args[0])); // input file
+		Scanner in = new Scanner(System.in); // input file
 		int n = in.nextInt(); // n-by-n percolation system
 
 		// turn on animation mode
