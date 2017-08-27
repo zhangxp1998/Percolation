@@ -1,9 +1,10 @@
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
+import java.util.Arrays;
+import java.util.Random;
 
 public class PercolationStats
 {
 	private static final double Z_STAR = 1.96;
+	private static final Random rand = new Random();
 
 	private double[] data;
 
@@ -25,8 +26,8 @@ public class PercolationStats
 			int count = 0;
 			while (!p.percolates())
 			{
-				int row = StdRandom.uniform(0, n);
-				int column = StdRandom.uniform(0, n);
+				int row = rand.nextInt(n);
+				int column = rand.nextInt(n);
 				if (p.isOpen(row, column))
 					continue;
 				p.open(row, column);
@@ -34,9 +35,10 @@ public class PercolationStats
 			}
 			data[i] = count * 1.0 / n / n;
 		}
-
-		mean = StdStats.mean(data);
-		stddev = StdStats.stddev(data);
+		mean = Arrays.stream(data).average().getAsDouble();
+		stddev = Arrays.stream(data).map(d -> d - mean).map(d -> d * d).sum();
+		stddev /= data.length - 1;
+		stddev = Math.sqrt(stddev);
 	}
 
 	public double mean() // sample mean of percolation threshold
@@ -61,6 +63,7 @@ public class PercolationStats
 
 	public static void main(String[] args) // test client (described below)
 	{
+		long startTime = System.nanoTime();
 		assert args.length == 2;
 		final int n = Integer.parseInt(args[0]);
 		final int T = Integer.parseInt(args[1]);
@@ -69,5 +72,7 @@ public class PercolationStats
 		System.out.printf("MEAN:\t%f\n", stats.mean());
 		System.out.printf("STDDEV:\t%f\n", stats.stddev());
 		System.out.printf("ZINTERVAL:\t%f, %f\n", stats.confidenceLo(), stats.confidenceHi());
+		long endTime = System.nanoTime();
+		System.out.println("Took: " + (endTime - startTime) / 1000000.0 + " ms");
 	}
 }

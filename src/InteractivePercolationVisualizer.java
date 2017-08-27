@@ -13,7 +13,6 @@
  ******************************************************************************/
 
 import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.StdOut;
 
 public class InteractivePercolationVisualizer
 {
@@ -54,7 +53,7 @@ public class InteractivePercolationVisualizer
 				{
 					if (!perc.isOpen(i, j))
 					{
-						StdOut.println(i + " " + j);
+						System.out.println(i + " " + j);
 					}
 					perc.open(i, j);
 				}

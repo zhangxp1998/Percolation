@@ -18,15 +18,17 @@
  ******************************************************************************/
 
 import java.awt.Font;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class PercolationVisualizer
 {
 
 	// delay in miliseconds (controls animation speed)
-	private static final int DELAY = 300;
+	private static final int DELAY = 200;
 
 	// draw n-by-n percolation system
 	public static void draw(Percolation perc, int n)
@@ -70,10 +72,10 @@ public class PercolationVisualizer
 
 	static boolean finished = false;
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws FileNotFoundException
 	{
-		In in = new In(args[0]); // input file
-		int n = in.readInt(); // n-by-n percolation system
+		Scanner in = new Scanner(new File(args[0])); // input file
+		int n = in.nextInt(); // n-by-n percolation system
 
 		// turn on animation mode
 		StdDraw.enableDoubleBuffering();
@@ -85,14 +87,15 @@ public class PercolationVisualizer
 		StdDraw.show();
 		StdDraw.pause(DELAY);
 
-		while (!in.isEmpty())
+		while (in.hasNext())
 		{
-			int i = in.readInt();
-			int j = in.readInt();
+			int i = in.nextInt();
+			int j = in.nextInt();
 			perc.open(i, j);
 			draw(perc, n);
 			StdDraw.show();
-			// StdDraw.pause(DELAY);
+			StdDraw.pause(DELAY);
 		}
+		in.close();
 	}
 }

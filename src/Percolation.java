@@ -7,8 +7,8 @@ public class Percolation
 	private final int N;
 	private BitSet grid;
 	private int last;
-	private WeightedQuickUnionUF uf;
-	private WeightedQuickUnionUF bf;
+	private WeightedQuickUnionPathCompression uf;
+	private WeightedQuickUnionPathCompression bf;
 
 	public Percolation(int n) // create n-by-n grid, with all sites blocked
 	{
@@ -18,14 +18,11 @@ public class Percolation
 		}
 
 		this.N = n;
-		uf = new WeightedQuickUnionUF(n * n + 2);
-		bf = new WeightedQuickUnionUF(n * n + 1);
+		uf = new WeightedQuickUnionPathCompression(n * n + 2);
+		bf = new WeightedQuickUnionPathCompression(n * n + 1);
 
 		last = N * N + 1;
 		grid = new BitSet(N * N + 2);
-		// sz = new int[grid.length];
-
-		// Arrays.fill(grid, -1);
 
 		// Open the virtual top and virtual bottom site
 		grid.set(0);
@@ -39,8 +36,8 @@ public class Percolation
 
 	private int toIndex(int row, int col)
 	{
-		assert(inBound(row));
-		assert(inBound(col));
+		assert (inBound(row));
+		assert (inBound(col));
 
 		// -1 because the input is 1 based
 		return 1 + row * N + col;
@@ -55,11 +52,13 @@ public class Percolation
 		int i = toIndex(row, col);
 		grid.set(i);
 
+		// If it is the first row, connect it with the virtual top
 		if (row == 0)
 		{
 			uf.union(0, i);
 			bf.union(0, i);
 		}
+		// If it is the last row, connect it wit the virtual bottom
 		if (row == N - 1)
 		{
 			uf.union(last, i);
@@ -108,23 +107,15 @@ public class Percolation
 		return isOpen(toIndex(row, col));
 	}
 
-	private boolean isConnected(int a, int b)
-	{
-		return uf.connected(a, b);
-	}
-
 	public boolean isFull(int row, int col) // is site (row, col) full?
 	{
-		assert inBound(row);
-		assert inBound(col);
-
 		int i = toIndex(row, col);
 		return isOpen(i) && bf.connected(0, i);
 	}
 
 	public boolean percolates() // does the system percolate?
 	{
-		return isConnected(0, last);
+		return uf.connected(0, last);
 	}
 
 	public static void main(String[] args) // test client (optional)
