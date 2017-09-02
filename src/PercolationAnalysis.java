@@ -9,7 +9,7 @@ public class PercolationAnalysis
 		for (int n : sizes)
 		{
 			PercolationStats ps = new PercolationStats(n, 30, PercolationStats::fast);
-			System.out.println(n + " : " + ps.meanTime());
+			System.out.println(n + " : " + ps.meanTime() + " : " + ps.mean());
 		}
 		System.out.println();
 		System.out.println();
@@ -17,7 +17,7 @@ public class PercolationAnalysis
 		for (int n : sizes)
 		{
 			PercolationStats ps = new PercolationStats(n, 30, PercolationStats::slow);
-			System.out.println(n + " : " + ps.meanTime());
+			System.out.println(n + " : " + ps.meanTime() + " : " + ps.mean());
 		}
 	}
 }

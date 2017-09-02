@@ -25,7 +25,7 @@ public class PercolationVisualizer
 {
 
 	// delay in miliseconds (controls animation speed)
-	private static final int DELAY = 200;
+	private static final int DELAY = 50;
 
 	// draw n-by-n percolation system
 	public static void draw(Percolation perc, int n)
@@ -91,7 +91,7 @@ public class PercolationVisualizer
 			perc.open(i, j);
 			draw(perc, n);
 			StdDraw.show();
-			StdDraw.pause(DELAY);
+//			StdDraw.pause(DELAY);
 		}
 		in.close();
 	}
